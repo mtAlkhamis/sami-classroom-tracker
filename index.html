@@ -100,7 +100,7 @@
   <div class="priority-list">
 
     <div class="card">
-      <span class="flag" style="background:var(--red);color:#fff">Due today</span>
+      <span class="flag" data-date="2026-09-17" style="background:var(--red);color:#fff">Due today</span>
       <div class="bubble" style="background:var(--blue)">📝</div>
       <div style="flex:1;min-width:0">
         <div class="top"><span class="subj">ICT</span><span class="date" data-date="2026-09-17">TODAY · SEP 17</span></div>
@@ -109,7 +109,7 @@
     </div>
 
     <div class="card">
-      <span class="flag" style="background:var(--red);color:#fff">Due Mon</span>
+      <span class="flag" data-date="2026-09-21" style="background:var(--red);color:#fff">Due Mon</span>
       <div class="bubble" style="background:var(--blue)">📝</div>
       <div style="flex:1;min-width:0">
         <div class="top"><span class="subj">Science</span><span class="date" data-date="2026-09-21">MON · SEP 21</span></div>
@@ -118,7 +118,7 @@
     </div>
 
     <div class="card">
-      <span class="flag" style="background:var(--red);color:#fff">Due Tue</span>
+      <span class="flag" data-date="2026-09-22" style="background:var(--red);color:#fff">Due Tue</span>
       <div class="bubble" style="background:var(--blue)">📝</div>
       <div style="flex:1;min-width:0">
         <div class="top"><span class="subj">ICT</span><span class="date" data-date="2026-09-22">TUE · SEP 22</span></div>
@@ -127,7 +127,7 @@
     </div>
 
     <div class="card">
-      <span class="flag" style="background:var(--red);color:#fff">Due Tue</span>
+      <span class="flag" data-date="2026-09-22" style="background:var(--red);color:#fff">Due Tue</span>
       <div class="bubble" style="background:var(--green)">🧠</div>
       <div style="flex:1;min-width:0">
         <div class="top"><span class="subj">Islamic Education</span><span class="date" data-date="2026-09-22">TUE · SEP 22</span></div>
@@ -136,7 +136,7 @@
     </div>
 
     <div class="card">
-      <span class="flag" style="background:var(--red);color:#fff">Due Wed</span>
+      <span class="flag" data-date="2026-09-23" style="background:var(--red);color:#fff">Due Wed</span>
       <div class="bubble" style="background:var(--red)">📚</div>
       <div style="flex:1;min-width:0">
         <div class="top"><span class="subj">Science</span><span class="date" data-date="2026-09-23">WED · SEP 23</span></div>
@@ -145,7 +145,7 @@
     </div>
 
     <div class="card">
-      <span class="flag" style="background:var(--amber);color:var(--ink)">Due Thu</span>
+      <span class="flag" data-date="2026-09-24" style="background:var(--amber);color:var(--ink)">Due Thu</span>
       <div class="bubble" style="background:var(--blue)">📝</div>
       <div style="flex:1;min-width:0">
         <div class="top"><span class="subj">Islamic Education</span><span class="date" data-date="2026-09-24">THU · SEP 24</span></div>
@@ -154,7 +154,7 @@
     </div>
 
     <div class="card">
-      <span class="flag" style="background:var(--purple);color:#fff">Oct 10</span>
+      <span class="flag" data-date="2026-10-10" style="background:var(--purple);color:#fff">Oct 10</span>
       <div class="bubble" style="background:var(--purple)">🎯</div>
       <div style="flex:1;min-width:0">
         <div class="top"><span class="subj">Islamic Ed. + Social Studies</span><span class="date" data-date="2026-10-10">SAT · OCT 10</span></div>
@@ -436,5 +436,34 @@
   </footer>
 
 </div>
+
+<script>
+(function(){
+  try{
+    function relLabel(n){
+      if(n < 0) return n === -1 ? 'Overdue 1 day' : 'Overdue ' + (-n) + ' days';
+      if(n === 0) return 'Due today';
+      if(n === 1) return 'Due tomorrow';
+      if(n <= 6) return 'In ' + n + ' days';
+      if(n <= 13) return 'In 1 week';
+      return 'In ' + Math.round(n / 7) + ' weeks';
+    }
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    var flags = document.querySelectorAll('.flag[data-date]');
+    for(var i=0;i<flags.length;i++){
+      var el = flags[i];
+      var d = new Date(el.getAttribute('data-date') + 'T00:00:00');
+      if(isNaN(d.getTime())) continue;
+      var diff = Math.round((d - today) / 86400000);
+      el.textContent = relLabel(diff);
+      if(diff < 0){ el.style.background = '#B9B2A0'; el.style.color = 'var(--ink)'; }
+      else if(diff <= 1){ el.style.background = 'var(--red)'; el.style.color = '#fff'; }
+      else if(diff <= 3){ el.style.background = 'var(--amber)'; el.style.color = 'var(--ink)'; }
+      else{ el.style.background = 'var(--purple)'; el.style.color = '#fff'; }
+    }
+  }catch(e){}
+})();
+</script>
 
 </body></html>
